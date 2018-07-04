@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<link rel="stylesheet" th:href="@{/layui-v2.2.5/layui/css/layui.css}">
+</head>
+<body>
+<form id="myform" >
+	<table class="layui-table">
+		<tr>		
+			<td>名称</td>
+			<td><input type="text" name="name"></td>
+		</tr>
+		<tr>			
+			<td>价格</td>
+			<td><input type="text" name="price"></td>
+		</tr>
+		<tr>
+			<td>作者</td>
+			<td><input type="text" name="author"></td>
+		</tr>	
+		<tr>
+			<td>图片</td>
+			<td><input type="file" name="file"></td>
+		</tr>
+		<tr>
+			<td>库存</td>
+			<td><input type="text" name="number"></td>
+		</tr>
+		<tr>
+			<td>出版时间</td>
+			<td><input type="date" name="publishDate"></td>
+		</tr>
+		<tr>
+			<td colspan="6" align="center"><button type="button" id="but1" class="layui-btn" onclick="aaaa();">提交</button></td>
+		</tr>
+	</table>
+</form>
+
+</body>
+ <script th:src="@{/jquery/jquery-3.3.1.min.js}" ></script>
+ <script th:src="@{/layui-v2.2.5/layui/layui.all.js}"></script>
+ <script type="text/javascript">
+ 		function aaaa(){
+ 			
+ 		
+ 		var data = new FormData(document.getElementById('myform'));
+ 		//$('but1').click(function(){
+ 		
+ 			
+ 			$.ajax({
+ 				url:'/book/insert',
+ 				data:data,//$(#myform).serialize(),
+ 				type:'post',
+ 			//	asyn:true,	
+ 				processData:false,
+		        contentType:false,
+ 				success:function(res){
+ 					if('success' ==  res){
+ 						layer.msg('添加成功');
+ 						//reset() 方法可把表单中的元素重置为它们的默认值。
+ 						$("#myform")[0].reset();
+ 					}else{
+ 						layer.msg('添加失败');
+ 					}
+ 				}
+ 				});
+ 				
+ 		}
+ 		//})
+ 	
+ 
+ 
+ 
+ </script>
+</html>

@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<link rel="stylesheet" th:href="@{/layui-v2.2.5/layui/css/layui.css}">
+</head>
+<body>
+	<table class="layui-table">
+		<tr>
+			<td>序号</td>
+			<td>名称</td>
+			<td>价格</td>
+			<td>作者</td>
+			<td>图片</td>
+			<td>库存</td>
+			<td>出版时间</td>
+			<td>操作</td>
+		</tr>
+		<tr th:each="book,iterStat : ${books}" th:id="${book.id}">
+			<td th:text="${iterStat.count}"></td>
+			<td th:text="${book.name}"></td>
+			<td th:text="${book.price}"></td>
+			<td th:text="${book.author}"></td>
+			<td>
+				<img  th:src="@{'/images/'+${book.picture}}">
+			</td>
+			<td th:text="${book.number}"></td>
+			
+			<td th:text="${#dates.format(book.publishDate, 'yyyy-MM-dd')}"></td>
+			<td>
+			<div class="layui-btn-group">
+				<a href="/book/addbook"><button class="layui-btn">增加</button></a>
+				<a th:href="@{/book/upd(id=${book.id})}"><button class="layui-btn">修改</button></a> 
+				<a href="javascript:void(0);"><button class="layui-btn" th:onclick="'del(\''+${book.id}+'\')'">删除</button></a>
+				<a th:href="@{/book/selecxiangqing(id=${book.id})}"><button class="layui-btn" >查看详情</button></a>
+				</div>
+			</td>
+			
+		</tr>
+	</table>
+
+</body>
+ <script th:src="@{/jquery/jquery-3.3.1.min.js}" ></script>
+ <script th:src="@{/layui-v2.2.5/layui/layui.all.js}"></script>
+ <script type="text/javascript">
+ function del(id){
+	 layer.confirm('确认删除吗？', function(index){
+	  //do something
+	  /* $.post('/book/delete',{id:id},function(res){
+		  if(res == 1){
+			  layer.msg('删除成功');
+			  $("tr#"+id).remove();
+			  
+		  }else{
+			  layer.msg('删除失败');
+		  }
+	  }); */
+	  $.ajax({
+		  url:'/book/delete',
+		  data:{id:id},
+		  type:'POST',
+		  success:function(res){
+			  if(res==1){
+				  layer.msg('删除成功');
+				  $("tr#"+id).remove();
+			  }else{
+				  layer.msg('删除失败');
+			  }
+		  }
+	  });
+	  layer.close(index);
+	});
+ }
+ 
+ </script>
+</html>

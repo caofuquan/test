@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<link rel="stylesheet" th:href="@{/layui-v2.2.5/layui/css/layui.css}">
+</head>
+<body>
+	<table class="layui-table" style="width:50%;">
+		<tr>
+			 <td colspan="2">
+				<h2>图书详情</h2>
+			</td>
+		</tr>
+		<tr>
+			<td>名称</td>
+			<td th:text="${ben.name}"></td>
+		</tr>
+		<tr>
+			<td>价格</td>
+			<td th:text="${ben.price}"></td>
+		</tr>
+		
+		<tr>
+			<td>作者</td>
+			<td th:text="${ben.author}"></td>
+		</tr>
+		
+		<tr>
+			<td>图片</td>
+			<td >
+				<img  th:src="@{'/images/'+${ben.picture}}">
+			</td>
+		</tr>
+		
+		
+		<tr>
+			<td>库存</td>
+			<td th:text="${ben.number}"></td>
+		</tr>
+		
+		<tr>
+			<td>出版时间</td>
+			<td th:text="${#dates.format(ben.publishDate, 'yyyy-MM-dd')}"></td>
+			
+		</tr>
+		<tr>
+			<td >
+				<a href="javascript:void(0);"><button class="layui-btn" th:onclick="'zan(\''+${ben.id}+'\')'">赞<span id="showzan" class="layui-badge layui-bg-gray" th:text="${pCount}"></span></button></a>
+			</td>		
+			
+			<td >
+				<a href="javascript:void(0);"><button class="layui-btn" th:onclick="'cai(\''+${ben.id}+'\')'">踩<span id="showcai" class="layui-badge layui-bg-gray" th:text="${trCount}"></span></button></a>
+			</td>								
+		</tr>
+		<tr>
+			<td id="pngjia" colspan="2">
+			<span><strong><font size="4" color="red">评价内容：</font></strong></span>
+				<div th:each="evenContent : ${slectcontent}">
+					<span th:text="${evenContent.discuss}"></span>
+				</div>
+			</td>
+			
+			
+		</tr>
+		<tr>
+			<td >
+				<textarea rows="4" cols="40" id="content"></textarea>
+			</td>
+		</tr>
+		<tr>
+			<td colspan="2" align="center"><button th:onclick="'submit(\''+${ben.id}+'\')'">提交</button></td>
+		</tr>
+	</table>
+	<div>
+		<a href="/book/index">返回</a>
+	</div>
+	
+</body>
+ <script th:src="@{/jquery/jquery-3.3.1.min.js}" ></script>
+ <script th:src="@{/layui-v2.2.5/layui/layui.all.js}"></script>
+ <script type="text/javascript">
+ function zan(id){
+	   $.ajax({
+		  url:'/book/praise',
+		  data:{id:id},
+		  type:'POST',
+		  success:function(res){
+			 $("span#showzan").html(res);
+		  }
+	  }); 
+	 
+ }
+ 
+ function cai(id){
+	   $.ajax({
+		  url:'/book/trample',
+		  data:{id:id},
+		  type:'POST',
+		  success:function(res){
+			 $("span#showcai").html(res);
+		  }
+	  }); 
+	 
+}
+ 
+ 
+ function submit(id){
+	 
+	var content = $("#content").val();
+	 $.ajax({
+		 url:'/book/evaluate',
+		 data:{content:content,id:id},
+		 type:'POST',
+		 success:function(res){
+			 $("<div>").html(content).appendTo($("#pngjia"));
+			 $("#content").val("");
+			 //$("#pngjia").html($("#content").val().appendTo("#pngjia"))
+		 }
+		 
+	 });
+	 
+ }
+ 
+ </script>
+</html>
